@@ -8,9 +8,14 @@ const MAX_RETRIES = process.env.MAX_RETRIES ? parseInt(process.env.MAX_RETRIES, 
 export async function botCommand(options) {
   const config = getConfig();
   const bot = new Bot(config, { dryRun: options.dryRun });
-  const currentBookedDate = options.current;
-  const targetDate = options.target || process.env.TARGET_DATE;
-  const minDate = options.min || process.env.MIN_DATE;
+  const currentBookedDate = options.current || process.env.CURRENT_APPOINTMENT_DATE;
+  const targetDate = options.target || process.env.BOOK_BEFORE_DATE;
+  const minDate = options.min || process.env.BOOK_AFTER_DATE;
+
+  if (!currentBookedDate) {
+    console.error("error: required option '-c, --current <date>' or CURRENT_APPOINTMENT_DATE env var not specified");
+    process.exit(1);
+  }
 
   log(`Initializing with current date ${currentBookedDate}`);
   await sendTelegram(`🟢 <b>Bot started successfully</b>\nCurrent: ${currentBookedDate || 'None'}\nTarget: ${targetDate || 'None'}\nMin: ${minDate || 'None'}`);

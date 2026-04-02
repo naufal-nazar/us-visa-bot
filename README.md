@@ -46,8 +46,9 @@ SCHEDULE_ID=your_schedule_id
 FACILITY_ID=your_facility_id
 
 # Date Constraints (Optional, can also use CLI arguments)
-MIN_DATE=2026-06-01
-TARGET_DATE=2026-06-10
+CURRENT_APPOINTMENT_DATE=2026-04-29
+BOOK_AFTER_DATE=2026-06-01
+BOOK_BEFORE_DATE=2026-06-10
 
 # Settings
 REFRESH_DELAY=3
@@ -67,8 +68,9 @@ TELEGRAM_CHAT_IDS=chat_id1,chat_id2
 | `COUNTRY_CODE` | Your country code | Found in URL: `https://ais.usvisa-info.com/en-{COUNTRY_CODE}/` <br>Examples: `br` (Brazil), `fr` (France), `de` (Germany) |
 | `SCHEDULE_ID` | Your appointment schedule ID | Found in URL when rescheduling: <br>`https://ais.usvisa-info.com/en-{COUNTRY_CODE}/niv/schedule/{SCHEDULE_ID}/continue_actions` |
 | `FACILITY_ID` | Your consulate facility ID | Found in network calls when selecting dates, or inspect the date selector dropdown <br>Example: Paris = `44` |
-| `MIN_DATE` | Start of acceptable range | Only accept dates equivalent or after (Optional) |
-| `TARGET_DATE` | End of acceptable range | Only accept dates equivalent or before (Optional) |
+| `CURRENT_APPOINTMENT_DATE` | Your current booked date | Required. (YYYY-MM-DD format) |
+| `BOOK_AFTER_DATE` | Start of acceptable range | Only accept dates equivalent or after (Optional) |
+| `BOOK_BEFORE_DATE` | End of acceptable range | Only accept dates equivalent or before (Optional) |
 | `REFRESH_DELAY` | Seconds between checks | Optional, defaults to 3 seconds |
 | `MAX_RETRIES` | Fallback circuits | Optional, automatically halts the bot if the connection fails this many times in a row. Defaults to `10`. |
 | `TELEGRAM_BOT_TOKEN` | Your Telegram Bot Token | Optional. Sent alerts for errors, date drops, and successful bookings. |
@@ -115,7 +117,7 @@ The bot will:
 1. **Log in** to your account using provided credentials
 2. **Check** for available dates every few seconds
 3. **Compare** found dates against your constraints:
-   - Validates if the date falls exclusively within your `MIN_DATE` and `TARGET_DATE` bounds (inclusive).
+   - Validates if the date falls exclusively within your `BOOK_AFTER_DATE` and `BOOK_BEFORE_DATE` bounds (inclusive).
    - If either bounds is missing, it dynamically evaluates the remaining constraint safely.
 4. **Book** the appointment automatically and safely `exit` if conditions are met.
 5. **Continue** monitoring until target is reached or manually stopped

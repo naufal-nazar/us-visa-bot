@@ -28,7 +28,7 @@ export async function sendTelegram(message) {
 
   for (const chatId of ids) {
     try {
-      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -37,8 +37,13 @@ export async function sendTelegram(message) {
           parse_mode: 'HTML'
         })
       });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error(`[Telegram Error] API rejected payload: ${res.status} - ${errText}`);
+      }
     } catch (e) {
-      console.error('Failed to send telegram message', e);
+      console.error('[Telegram Error] Network failure:', e.message);
     }
   }
 }
