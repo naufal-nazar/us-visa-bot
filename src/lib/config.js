@@ -2,6 +2,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+if (process.env.IGNORE_SSL === 'true') {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  console.warn('⚠️ WARNING: SSL Verification is globally disabled via IGNORE_SSL=true');
+}
+
 export function getConfig() {
   const config = {
     email: process.env.EMAIL,
